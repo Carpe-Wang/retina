@@ -23,7 +23,7 @@ func main() {
 	opts := log.GetDefaultLogOpts()
 
 	// Enable telemetry if applicationInsightsID is provided
-	if applicationInsightsID != "" {
+	if applicationInsightsID != "" && enableTelemetry {
 		opts.EnableTelemetry = true
 		opts.ApplicationInsightsID = applicationInsightsID
 		// Initialize application insights
