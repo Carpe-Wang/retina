@@ -22,9 +22,15 @@ var (
 func main() {
 	// Initialize logger
 	opts := log.GetDefaultLogOpts()
+	zl, err := log.SetupZapLogger(opts)
+	if err != nil {
+		panic(err)
+	}
+	l := zl.Named("init-retina").With(zap.String("version", version))
+	// Load configuration
 	cfg, err := config.GetConfig("/retina/config/config.yaml")
 	if err != nil {
-		log.Fatalf("Failed to get config: %v", err)
+		l.Fatal("Failed to get config", zap.Error(err))
 	}
 
 	// Enable telemetry if applicationInsightsID is provided
@@ -36,13 +42,6 @@ func main() {
 		defer telemetry.ShutdownAppInsights()
 		defer telemetry.TrackPanic()
 	}
-
-	zl, err := log.SetupZapLogger(opts)
-	if err != nil {
-		panic(err)
-	}
-	l := zl.Named("init-retina").With(zap.String("version", version))
-
 	// Setup BPF
 	bpf.Setup(l)
 }
