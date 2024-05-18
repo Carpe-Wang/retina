@@ -5,6 +5,7 @@ package main
 
 import (
 	"github.com/microsoft/retina/pkg/bpf"
+	"github.com/microsoft/retina/pkg/config"
 	"github.com/microsoft/retina/pkg/log"
 	"github.com/microsoft/retina/pkg/telemetry"
 	"go.uber.org/zap"
@@ -21,9 +22,10 @@ var (
 func main() {
 	// Initialize logger
 	opts := log.GetDefaultLogOpts()
+	cfg, err := config.GetConfig("/retina/config/config.yaml")
 
 	// Enable telemetry if applicationInsightsID is provided
-	if applicationInsightsID != "" && enableTelemetry {
+	if applicationInsightsID != "" && cfg.EnableTelemetry {
 		opts.EnableTelemetry = true
 		opts.ApplicationInsightsID = applicationInsightsID
 		// Initialize application insights
