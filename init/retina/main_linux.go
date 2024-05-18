@@ -23,6 +23,9 @@ func main() {
 	// Initialize logger
 	opts := log.GetDefaultLogOpts()
 	cfg, err := config.GetConfig("/retina/config/config.yaml")
+	if err != nil {
+		log.Fatalf("Failed to get config: %v", err)
+	}
 
 	// Enable telemetry if applicationInsightsID is provided
 	if applicationInsightsID != "" && cfg.EnableTelemetry {
