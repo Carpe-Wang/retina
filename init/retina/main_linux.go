@@ -32,7 +32,6 @@ func main() {
 	if err != nil {
 		l.Fatal("Failed to get config", zap.Error(err))
 	}
-
 	// Enable telemetry if applicationInsightsID is provided
 	if applicationInsightsID != "" && cfg.EnableTelemetry {
 		opts.EnableTelemetry = true
