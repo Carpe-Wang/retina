@@ -4,6 +4,8 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/microsoft/retina/pkg/bpf"
 	"github.com/microsoft/retina/pkg/config"
 	"github.com/microsoft/retina/pkg/log"
@@ -26,12 +28,18 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Define a command-line flag "config" with a default value and parse the flags, then create a logger with a name and version.
+	configPath := flag.String("config", "/retina/config/config.yaml", "path to the config file")
+	flag.Parse()
 	l := zl.Named("init-retina").With(zap.String("version", version))
+
 	// Load configuration
-	cfg, err := config.GetConfig("/retina/config/config.yaml")
+	cfg, err := config.GetConfig(*configPath)
 	if err != nil {
 		l.Fatal("Failed to get config", zap.Error(err))
 	}
+
 	// Enable telemetry if applicationInsightsID is provided
 	if applicationInsightsID != "" && cfg.EnableTelemetry {
 		opts.EnableTelemetry = true
